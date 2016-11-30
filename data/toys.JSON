@@ -1,0 +1,81 @@
+{
+  "toys": [
+    {
+        "name": "Batman Figures",
+        "price": 89.99,
+        "url": "res/batman_figures.jpg",
+        "desc": "Batman, Robin, The Joker, and The Riddler. All four figures are included in this classic set!",
+        "id": "0"
+    },
+    {
+        "name": "Clockwork Bus",
+        "price": 39.99,
+        "url": "res/retro_bus.jpg",
+        "desc": "A mechanical retro bus. Wind it up and watch it go!",
+        "id": "1"
+    },
+    {
+        "name": "Clockwork Flying Saucer",
+        "price": 50.99,
+        "url": "res/flying_saucer.jpg",
+        "desc": "A mechanical flying saucer. Wind it up and watch it go!",
+        "id": "2"
+    },
+    {
+        "name": "Clockwork Retro-Futuristic Car",
+        "price": 38.99,
+        "url": "res/future_car.jpg",
+        "desc": "A mechanical retro-futuristic car. Wind it up and watch it go!",
+        "id": "3"
+    },
+    {
+        "name": "Clockwork Plane",
+        "price": 36.99,
+        "url": "res/retro_plane.jpg",
+        "desc": "A mechanical plane. Wind it up and watch it go!",
+        "id": "4"
+    },
+    {
+        "name": "Clockwork Robot",
+        "price": 45.99,
+        "url": "res/clockwork_robot.jpg",
+        "desc": "A mechanical robot. Wind it up and watch it go!",
+        "id": "5"
+    },
+    {
+        "name": "Clockwork Robot Tank",
+        "price": 55.99,
+        "url": "res/clockwork_tank_robot.jpg",
+        "desc": "A mechanical robot tank. Wind it up and watch it go!",
+        "id": "6"
+    },
+    {
+        "name": "Clockwork Train",
+        "price": 40.99,
+        "url": "res/clockwork_train.jpg",
+        "desc": "A mechanical train. Wind it up and watch it go!",
+        "id": "7"
+    },
+    {
+        "name": "Fisher Price Camera",
+        "price": 112.99,
+        "url": "res/fisher_price_camera.jpg",
+        "desc": "Vintage fisher price camera! Working flash!",
+        "id": "8"
+    },
+    {
+        "name": "Gumby figure",
+        "price": 25.99,
+        "url": "res/gumby.jpg",
+        "desc": "Bendable, stretchable, Gumby. You'll love this guy!",
+        "id": "9"
+    },
+    {
+        "name": "Simon",
+        "price": 69.99 ,
+        "url": "res/simon.jpg",
+        "desc": "A challenging puzzle game. Easy to learn, difficult to master!",
+        "id": "10"
+    }
+  ]
+}
