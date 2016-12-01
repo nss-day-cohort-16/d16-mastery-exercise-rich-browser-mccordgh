@@ -1,0 +1,13 @@
+{{#each toys}}
+	
+	<div id="card--{{@index}}" class="toyCard col-md-3">
+		<h2>{{name}}</h2>
+		<button type="button" class="delButton">X</button>
+		<div>
+		 <img src="{{url}}" class="cardImage">
+		</div>
+		<p>${{price}}</p>
+		<p>{{desc}}</p>
+	</div>
+
+{{/each}}
