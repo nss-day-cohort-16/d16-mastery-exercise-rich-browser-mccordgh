@@ -6,13 +6,17 @@ let Model = require('./Model.js');
 Model.initialize();
 },{"./Model.js":3}],2:[function(require,module,exports){
 "use strict";
+// let modalTemplate = require('../templates/card.hbs');
 
 let Events = {
 	btnClickHandler(event){
 
 	},
-	searchHandler(event){
-
+	filterHandler(toys, toyFilter){
+		let tmpArray = $.grep(toys, function(i) {
+			return i.name.toLowerCase().indexOf(toyFilter.toLowerCase()) > -1;
+		});
+		return tmpArray;
 	},
 	listAllView(event){
 
@@ -20,9 +24,13 @@ let Events = {
 	addView(event){
 		
 	},
-	singleView(event){
-		
-	}
+	// imageClick(event, toyArray, ID){
+	// 	console.log("imgclick - ID", ID);
+	// 	console.log("toyArray", toyArray);
+	// 	return toyArray[ID]", toyArray[ID]);
+ //  	// $('#singleView').html(modalTemplate({toys: toyArray[ID]}));
+ //   // 	$('#singleView').css('display', 'block');
+	// }
 };
 
 module.exports = Events;
@@ -36,17 +44,21 @@ let db = require('./dbInteractions.js'),
 let Model = {
 	initialize(){
 		View.setupViews();
-		this.getToys();
+		this.loadToys();
 	},
-	getToys(){
+	loadToys(){
 		db.getAllToys()
 		.then((data) => {
 			toys = data;
+			View.setToyArray(data);
 			View.displayToys(data);
 			View.setEventListeners();
 		}).catch((error) => {
 			console.log("error", error);
 		});
+	},
+	getToys(){
+		return toys;
 	}
 };
 
@@ -60,14 +72,15 @@ let HandleBars = require('hbsfy/runtime'),
     modalTemplate = require('../templates/singleView.hbs'),
     addTemplate = require('../templates/addView.hbs'),
     navTemplate = require('../templates/navbar.hbs'),
-    Events = require('./Events.js');
+    Events = require('./Events.js'),
+    toyList = [];
 
 let View = {
 	setupViews(){
 		$('<div />', {
 			id: 'navDiv',
 			html: navTemplate()
-		}).appendTo($('#mainDiv'));
+		}).appendTo($('#navDiv'));
 
 		$('<div />', {
 			id: 'mainView',
@@ -78,12 +91,6 @@ let View = {
 			id: 'listAllView'
 		}).appendTo($('#mainView'));
 		
-		$('<div />', {
-			id: 'myModal',
-			class: 'modal hidden',
-			html: modalTemplate()
-		}).appendTo($('#mainView'));
-
 		$('<div />', {
 			id: 'addView',
 			class: 'hidden',
@@ -97,16 +104,8 @@ let View = {
 			Events.btnClickHandler(event);
 		});
 
-		$('#txtSearch').keyup((event) =>{
-			if (event.keyCode === 13) {
-				console.log("txtSearch enter key pressed");
-				Events.searchHandler(event);
-			}
-		});
-
-		$('#searchButton').click((event) => {
-			console.log("search button clicked");
-			Events.searchHandler(event);
+		$('#txtFilter').keyup(() =>{
+				this.displayToys(Events.filterHandler(toyList, $('#txtFilter').val()));
 		});
 
 		$('#listAllButton').click((event) => {
@@ -121,13 +120,27 @@ let View = {
 
 		$('.cardImage').click((event) => {
 			console.log('toycard image clicked');
-			Events.singleView(event);
+			this.displaySingleToy(toyList[event.target.id]);
 		});
 
+		$('.modal').click((event) => {
+			console.log("modal clicked");
+			$('#modalView').css('display', 'none');
+		});
+	
 	},
 	displayToys(toyArray){
+		console.log("toyArray", toyArray);
 		let toysHTML = cardTemplate({toys: toyArray});
 		$('#listAllView').html(toysHTML);
+	},
+	setToyArray(toyArray){
+		toyList = toyArray;
+	},
+	displaySingleToy(toyStr){
+		let toysHTML = modalTemplate({toys: [toyStr]});
+		$('#singleView').html(toysHTML);
+		$('#modalView').css('display', 'block');
 	}
 };
 
@@ -1837,15 +1850,17 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
 
   return "	\r\n	<div id=\"card--"
     + alias4(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
-    + "\" class=\"toyCard col-md-3\">\r\n		<h2>"
+    + "\" class=\"toyCard col-md-2\">\r\n		<div class=\"cardHeader\">\r\n			<button type=\"button\" class=\"delButton pull-right\">X</button>\r\n			<h3>"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "</h2>\r\n		<button type=\"button\" class=\"delButton\">X</button>\r\n		<div>\r\n		 <img src=\""
+    + "</h3>\r\n		</div>\r\n		<div class=\"cardImageDiv\">\r\n		 <img src=\""
     + alias4(((helper = (helper = helpers.url || (depth0 != null ? depth0.url : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"url","hash":{},"data":data}) : helper)))
-    + "\" class=\"cardImage\">\r\n		</div>\r\n		<p>$"
+    + "\" class=\"cardImage\" id=\""
+    + alias4(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
+    + "\">\r\n		</div>\r\n		<div class=\"cardDesc\">\r\n			<p class=\"price\">$"
     + alias4(((helper = (helper = helpers.price || (depth0 != null ? depth0.price : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"price","hash":{},"data":data}) : helper)))
-    + "</p>\r\n		<p>"
+    + "</p>\r\n			<p class=\"desc\">"
     + alias4(((helper = (helper = helpers.desc || (depth0 != null ? depth0.desc : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"desc","hash":{},"data":data}) : helper)))
-    + "</p>\r\n	</div>\r\n\r\n";
+    + "</p>\r\n		</div>\r\n	</div>\r\n\r\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
@@ -1856,14 +1871,32 @@ module.exports = HandlebarsCompiler.template({"1":function(container,depth0,help
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<nav class=\"navbar navbar-default\">\r\n  <div class=\"container-fluid\">\r\n    <!-- Brand and toggle get grouped for better mobile display -->\r\n    <div class=\"navbar-header\">\r\n      <a class=\"navbar-brand\" href=\"#\">Crazy Eddy's Consignment Toys!</a>\r\n    </div>\r\n    <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\r\n      <div class=\"navbar-form navbar-left\" role=\"search\">\r\n        <div class=\"form-group\">\r\n          <input id=\"txtSearch\" type=\"text\" class=\"form-control\" placeholder=\"New description\">\r\n          <a href=\"#\" id=\"searchButton\" class=\"btn btn-info btn-lg\">\r\n            <span class=\"glyphicon glyphicon-search\"></span> Search \r\n          </a>\r\n          <a href=\"#\" id=\"listAllButton\" class=\"btn btn-info btn-lg\">\r\n            <span class=\"glyphicon glyphicon-list\"></span> View All\r\n          </a>\r\n          <a href=\"#\" id=\"addButton\" class=\"btn btn-info btn-lg\">\r\n            <span class=\"glyphicon glyphicon-plus\"></span> Add a Toy \r\n          </a>\r\n        </div>\r\n      </div>\r\n    </div><!-- /.navbar-collapse -->\r\n  </div><!-- /.container-fluid -->\r\n</nav>\r\n";
+    return "<nav class=\"navbar navbar-default\">\r\n  <div class=\"container-fluid\">\r\n    <!-- Brand and toggle get grouped for better mobile display -->\r\n    <div class=\"navbar-header\">\r\n      <a class=\"navbar-brand\">R3TR0 Toys!</a>\r\n    </div>\r\n    <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\r\n      <div class=\"navbar-form navbar-left\" role=\"search\">\r\n        <div class=\"form-group\">\r\n            <span class=\"glyphicon glyphicon-search\"></span>\r\n          <input id=\"txtFilter\" type=\"text\" class=\"form-control\" placeholder=\"Filter by Toy Name\">\r\n        </div>\r\n      </div>\r\n      <div class=\"navbar-form navbar-right\">\r\n        <a href=\"#\" id=\"listAllButton\" class=\"btn btn-info btn-lg\">\r\n          <span class=\"glyphicon glyphicon-list\"></span> View All\r\n        </a>\r\n        <a href=\"#\" id=\"addButton\" class=\"btn btn-info btn-lg\">\r\n          <span class=\"glyphicon glyphicon-plus\"></span> Add a Toy \r\n        </a>\r\n      </div>\r\n    </div><!-- /.navbar-collapse -->\r\n  </div><!-- /.container-fluid -->\r\n</nav>\r\n";
 },"useData":true});
 
 },{"hbsfy/runtime":30}],34:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<div id=\"singleView\" class=\"modal-content\">\r\n</div>\r\n";
+module.exports = HandlebarsCompiler.template({"1":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+  return "	\r\n	<div id=\"card--"
+    + alias4(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
+    + "\" class=\"modalCard col-md-4 col-md-offset-4\">\r\n		<div class=\"modalHeader\">\r\n			<button type=\"button\" class=\"modalButton pull-right\">X</button>\r\n			<h3>"
+    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+    + "</h3>\r\n		</div>\r\n		<div class=\"modalImageDiv\">\r\n		 <img src=\""
+    + alias4(((helper = (helper = helpers.url || (depth0 != null ? depth0.url : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"url","hash":{},"data":data}) : helper)))
+    + "\" class=\"modalImage\" id=\""
+    + alias4(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
+    + "\">\r\n		</div>\r\n		<div class=\"cardDesc\">\r\n			<p class=\"price\">$"
+    + alias4(((helper = (helper = helpers.price || (depth0 != null ? depth0.price : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"price","hash":{},"data":data}) : helper)))
+    + "</p>\r\n			<p class=\"desc\">"
+    + alias4(((helper = (helper = helpers.desc || (depth0 != null ? depth0.desc : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"desc","hash":{},"data":data}) : helper)))
+    + "</p>\r\n		</div>\r\n	</div>\r\n\r\n";
+},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1;
+
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.toys : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"useData":true});
 
 },{"hbsfy/runtime":30}]},{},[1]);

@@ -7,17 +7,21 @@ let db = require('./dbInteractions.js'),
 let Model = {
 	initialize(){
 		View.setupViews();
-		this.getToys();
+		this.loadToys();
 	},
-	getToys(){
+	loadToys(){
 		db.getAllToys()
 		.then((data) => {
 			toys = data;
+			View.setToyArray(data);
 			View.displayToys(data);
 			View.setEventListeners();
 		}).catch((error) => {
 			console.log("error", error);
 		});
+	},
+	getToys(){
+		return toys;
 	}
 };
 

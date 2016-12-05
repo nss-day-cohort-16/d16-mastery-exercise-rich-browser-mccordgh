@@ -6,14 +6,15 @@ let HandleBars = require('hbsfy/runtime'),
     modalTemplate = require('../templates/singleView.hbs'),
     addTemplate = require('../templates/addView.hbs'),
     navTemplate = require('../templates/navbar.hbs'),
-    Events = require('./Events.js');
+    Events = require('./Events.js'),
+    toyList = [];
 
 let View = {
 	setupViews(){
 		$('<div />', {
 			id: 'navDiv',
 			html: navTemplate()
-		}).appendTo($('#mainDiv'));
+		}).appendTo($('#navDiv'));
 
 		$('<div />', {
 			id: 'mainView',
@@ -24,12 +25,6 @@ let View = {
 			id: 'listAllView'
 		}).appendTo($('#mainView'));
 		
-		$('<div />', {
-			id: 'myModal',
-			class: 'modal hidden',
-			html: modalTemplate()
-		}).appendTo($('#mainView'));
-
 		$('<div />', {
 			id: 'addView',
 			class: 'hidden',
@@ -43,16 +38,8 @@ let View = {
 			Events.btnClickHandler(event);
 		});
 
-		$('#txtSearch').keyup((event) =>{
-			if (event.keyCode === 13) {
-				console.log("txtSearch enter key pressed");
-				Events.searchHandler(event);
-			}
-		});
-
-		$('#searchButton').click((event) => {
-			console.log("search button clicked");
-			Events.searchHandler(event);
+		$('#txtFilter').keyup(() =>{
+				this.displayToys(Events.filterHandler(toyList, $('#txtFilter').val()));
 		});
 
 		$('#listAllButton').click((event) => {
@@ -67,13 +54,27 @@ let View = {
 
 		$('.cardImage').click((event) => {
 			console.log('toycard image clicked');
-			Events.singleView(event);
+			this.displaySingleToy(toyList[event.target.id]);
 		});
 
+		$('.modal').click((event) => {
+			console.log("modal clicked");
+			$('#modalView').css('display', 'none');
+		});
+	
 	},
 	displayToys(toyArray){
+		console.log("toyArray", toyArray);
 		let toysHTML = cardTemplate({toys: toyArray});
 		$('#listAllView').html(toysHTML);
+	},
+	setToyArray(toyArray){
+		toyList = toyArray;
+	},
+	displaySingleToy(toyStr){
+		let toysHTML = modalTemplate({toys: [toyStr]});
+		$('#singleView').html(toysHTML);
+		$('#modalView').css('display', 'block');
 	}
 };
 

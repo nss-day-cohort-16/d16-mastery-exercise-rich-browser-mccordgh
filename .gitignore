@@ -4,3 +4,4 @@
 *.css.map
 lib/node_modules
 js/fb-getter.js
+dist/

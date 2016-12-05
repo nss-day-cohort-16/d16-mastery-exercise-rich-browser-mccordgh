@@ -1,13 +1,17 @@
 {{#each toys}}
 	
-	<div id="card--{{@index}}" class="toyCard col-md-3">
-		<h2>{{name}}</h2>
-		<button type="button" class="delButton">X</button>
-		<div>
-		 <img src="{{url}}" class="cardImage">
+	<div id="card--{{@index}}" class="toyCard col-md-2">
+		<div class="cardHeader">
+			<button type="button" class="delButton pull-right">X</button>
+			<h3>{{name}}</h3>
 		</div>
-		<p>${{price}}</p>
-		<p>{{desc}}</p>
+		<div class="cardImageDiv">
+		 <img src="{{url}}" class="cardImage" id="{{@index}}">
+		</div>
+		<div class="cardDesc">
+			<p class="price">${{price}}</p>
+			<p class="desc">{{desc}}</p>
+		</div>
 	</div>
 
 {{/each}}
