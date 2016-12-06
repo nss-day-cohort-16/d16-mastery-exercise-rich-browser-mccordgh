@@ -28,8 +28,6 @@ function setEventListeners(){
 	});
 
 	$('#addToyBtn').click((event) => {
-		console.log("add toy button clicked");
-		console.log(">>" + $('#txtToyName').val() + "<<");
 		if ($('#txtToyName').val() === "" || $('#txtToyURL').val() === "" || $('#txtToyPrice').val() === "" || $('#txtToyDesc').val() === "") {
 			alert("Please fill in all fields!");
 		} else {

@@ -1,10 +1,6 @@
 "use strict";
-// let modalTemplate = require('../templates/card.hbs');
 
 let Events = {
-	btnClickHandler(event){
-
-	},
 	listAllView(event){
 		$('#listAllView').removeClass('hidden');
 		$('#addView').addClass('hidden');
