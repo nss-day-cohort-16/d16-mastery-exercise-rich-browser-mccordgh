@@ -1,0 +1,17 @@
+{{#each toys}}
+	
+	<div id="card--{{@index}}" class="modalCard">
+		<div class="modalHeader">
+			<button type="button" class="modalButton pull-right">X</button>
+			<h3>{{name}}</h3>
+		</div>
+		<div class="modalImageDiv">
+		 <img src="{{url}}" class="modalImage" id="{{@index}}">
+		</div>
+		<div class="cardDesc">
+			<p class="price">${{price}}</p>
+			<p class="desc">{{desc}}</p>
+		</div>
+	</div>
+
+{{/each}}
