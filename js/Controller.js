@@ -1,5 +1,46 @@
 "use strict";
 
-let Model = require('./Model.js');
+let Model = require('./Model.js'),
+		Events = require('./Events.js');
 
 Model.initialize();
+
+$(function() {
+	setEventListeners();
+});
+
+function setEventListeners(){
+	$('#txtFilter').keyup(() =>{
+			Model.filterHandler(Model.getToys(), $('#txtFilter').val());
+	});
+
+	$('#listAllButton').click((event) => {
+		Model.loadToys();
+		Events.listAllView(event);
+	});
+
+	$('#addButton').click((event) => {
+		Events.addView(event);
+	});
+
+	$('.modal').click((event) => {
+		$('#modalView').css('display', 'none');
+	});
+
+	$('#addToyBtn').click((event) => {
+		console.log("add toy button clicked");
+		console.log(">>" + $('#txtToyName').val() + "<<");
+		if ($('#txtToyName').val() === "" || $('#txtToyURL').val() === "" || $('#txtToyPrice').val() === "" || $('#txtToyDesc').val() === "") {
+			alert("Please fill in all fields!");
+		} else {
+			Model.addToy({
+				desc: $('#txtToyDesc').val(),
+				name: $('#txtToyName').val(),
+				price: $('#txtToyPrice').val(),
+				url: $('#txtToyURL').val()
+			});
+		}
+
+	});
+
+}

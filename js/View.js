@@ -27,44 +27,12 @@ let View = {
 		
 		$('<div />', {
 			id: 'addView',
-			class: 'hidden',
+			class: 'addView hidden',
 			html: addTemplate()
 		}).appendTo($('#mainView'));
 		
 	},
-	setEventListeners(){
-		$('.delButton').click((event) => {
-			console.log('toycard delete button clicked');
-			Events.btnClickHandler(event);
-		});
-
-		$('#txtFilter').keyup(() =>{
-				this.displayToys(Events.filterHandler(toyList, $('#txtFilter').val()));
-		});
-
-		$('#listAllButton').click((event) => {
-			console.log("list all button clicked");
-			Events.listAllView(event);
-		});
-
-		$('#addButton').click((event) => {
-			console.log("add button clicked");
-			Events.addView(event);
-		});
-
-		$('.cardImage').click((event) => {
-			console.log('toycard image clicked');
-			this.displaySingleToy(toyList[event.target.id]);
-		});
-
-		$('.modal').click((event) => {
-			console.log("modal clicked");
-			$('#modalView').css('display', 'none');
-		});
-	
-	},
-	displayToys(toyArray){
-		console.log("toyArray", toyArray);
+		displayToys(toyArray){
 		let toysHTML = cardTemplate({toys: toyArray});
 		$('#listAllView').html(toysHTML);
 	},
